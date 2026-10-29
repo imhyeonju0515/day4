@@ -9,7 +9,7 @@ const QUERY = {
   '제주 말 인형': 'Jeju pony horse',
   '유채꿀': 'honey jar honeycomb',
   '감귤 초콜릿': 'orange chocolate',
-  '해녀 소라 과자': 'seashell conch beach',
+  '해녀 소라 과자': 'shell shaped cookies madeleine',
 }
 
 const cache = new Map()
