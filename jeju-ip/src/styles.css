@@ -98,3 +98,55 @@ footer a { color: #ffd28a; }
   .photo { margin-bottom: 10px; border-radius: 14px; }
 }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+
+/* 제주 장터 */
+.shop { padding-top: 18px; }
+.products { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 16px; }
+.product { display: flex; flex-direction: column; padding: 18px 16px 16px; border-radius: 22px; background: #fff; box-shadow: 0 4px 16px rgba(120,60,0,.12); transition: transform .25s, box-shadow .25s; }
+.product:hover { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(255,138,31,.28); }
+.p-emoji { display: grid; place-items: center; height: 96px; margin-bottom: 10px; border-radius: 16px; font-size: 52px; background: linear-gradient(160deg, #fff0d6, #ffe2b0); }
+.product h3 { margin: 0 0 4px; font-family: var(--head); font-weight: 400; font-size: 20px; color: #a24800; }
+.p-desc { margin: 0 0 12px; flex: 1; font-size: 13px; opacity: .75; line-height: 1.45; word-break: keep-all; }
+.p-foot { display: flex; align-items: flex-end; justify-content: space-between; gap: 8px; }
+.p-foot b { display: block; font-size: 16px; }
+.p-foot small { opacity: .6; }
+.p-foot button { padding: 8px 14px; white-space: nowrap; }
+button.ok { background: #1b9a6a; color: #fff; font-weight: 700; box-shadow: none; }
+code { background: #ffeacb; padding: 1px 6px; border-radius: 6px; }
+
+/* 장바구니 */
+.cart-btn { position: relative; padding: 8px 12px; font-size: 18px; line-height: 1; }
+.cart-btn i { position: absolute; top: -6px; right: -6px; min-width: 20px; height: 20px; padding: 0 5px; border-radius: 999px; background: #e8517a; color: #fff; font: 700 12px/20px sans-serif; text-align: center; }
+.drawer-bg { place-items: stretch end; padding: 0; }
+.drawer { width: min(420px, 100%); height: 100%; display: flex; flex-direction: column; background: #fffaf2; box-shadow: -10px 0 40px rgba(60,30,0,.3); animation: slide .3s ease; }
+@keyframes slide { from { transform: translateX(40px); opacity: 0; } to { transform: none; opacity: 1; } }
+.drawer header { display: flex; justify-content: space-between; align-items: center; padding: 16px 18px; background: linear-gradient(160deg, #ffb347, #ff7a12); color: #fff; }
+.drawer header h2 { margin: 0; font-family: var(--head); font-weight: 400; font-size: 22px; }
+.drawer header small { font-size: 14px; opacity: .9; }
+.x2 { padding: 4px 11px; background: rgba(255,255,255,.85); }
+.cart-empty { flex: 1; display: grid; place-content: center; text-align: center; gap: 8px; padding: 20px; opacity: .8; }
+.cart-empty span { font-size: 56px; }
+.cart-list { flex: 1; margin: 0; padding: 10px 14px; list-style: none; overflow-y: auto; }
+.cart-list li { display: flex; gap: 12px; align-items: center; padding: 12px 4px; border-bottom: 1px dashed #f0cf9e; }
+.c-emoji { display: grid; place-items: center; width: 54px; height: 54px; flex: none; border-radius: 14px; font-size: 30px; background: #ffe8c4; }
+.c-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.c-info small { opacity: .65; }
+.qty { display: inline-flex; align-items: center; gap: 4px; margin-top: 4px; }
+.qty button { width: 28px; height: 28px; padding: 0; font-size: 16px; line-height: 1; }
+.qty span { min-width: 28px; text-align: center; font-weight: 700; }
+.c-right { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+.del { padding: 3px 10px; font-size: 12px; background: #ffeceb; color: #b3261e; box-shadow: none; }
+.drawer footer { margin: 0; padding: 14px 18px 18px; text-align: left; color: var(--ink); background: #fff; border-top: 1px solid var(--line); }
+.drawer footer .primary { width: 100%; padding: 12px; font-size: 16px; }
+.total { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+.total b { font-size: 22px; color: #c85d00; }
+.who button { white-space: nowrap; }
+@media (max-width: 560px) {
+  .email { display: none; }
+  .products { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .product { padding: 12px 10px 12px; border-radius: 16px; }
+  .p-emoji { height: 70px; font-size: 40px; }
+  .product h3 { font-size: 17px; }
+  .p-foot { flex-direction: column; align-items: stretch; }
+  .p-foot button { width: 100%; }
+}

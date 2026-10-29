@@ -2,6 +2,9 @@ import { lazy, Suspense, useEffect, useState } from 'react'
 import { supabase, supabaseReady } from './supabase.js'
 import Auth from './Auth.jsx'
 import Gallery from './Gallery.jsx'
+import Shop from './Shop.jsx'
+import CartDrawer from './CartDrawer.jsx'
+import { useCart } from './useCart.js'
 
 const Hero3D = lazy(() => import('./Hero3D.jsx'))
 
@@ -9,8 +12,11 @@ export default function App() {
   const [user, setUser] = useState(null)
   const [ready, setReady] = useState(!supabaseReady)
   const [showAuth, setShowAuth] = useState(false)
+  const [showCart, setShowCart] = useState(false)
   const [text, setText] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
+  const cart = useCart(user)
+  const needLogin = () => (supabaseReady ? setShowAuth(true) : alert('로그인 설정이 아직 안 되어 있어요.'))
 
   useEffect(() => {
     if (!supabaseReady) return
@@ -34,6 +40,9 @@ export default function App() {
         <div className="who">
           {!ready ? null : user ? (
             <>
+              <button className="cart-btn" onClick={() => setShowCart(true)} aria-label="장바구니">
+                🛒{cart.count > 0 && <i>{cart.count}</i>}
+              </button>
               <span className="email">{user.email}</span>
               <button onClick={() => supabase.auth.signOut()}>로그아웃</button>
             </>
@@ -59,7 +68,8 @@ export default function App() {
         {!supabaseReady && (
           <p className="status err">Supabase 환경변수(VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY)가 아직 없어서 로그인 기능이 꺼져 있어요.</p>
         )}
-        <Gallery user={user} searchTerm={searchTerm} onNeedLogin={() => (supabaseReady ? setShowAuth(true) : alert('로그인 설정이 아직 안 되어 있어요.'))} />
+        {supabaseReady && <Shop user={user} cart={cart} onNeedLogin={needLogin} />}
+        <Gallery user={user} searchTerm={searchTerm} onNeedLogin={needLogin} />
       </main>
 
       <footer>
@@ -67,6 +77,7 @@ export default function App() {
         <p>🍊 제주의 바람과 귤향을 담아 · 사진 출처 <a href="https://pixabay.com" target="_blank" rel="noreferrer">Pixabay</a></p>
       </footer>
       {showAuth && !user && <Auth onClose={() => setShowAuth(false)} />}
+      {showCart && user && <CartDrawer cart={cart} onClose={() => setShowCart(false)} />}
     </>
   )
 }

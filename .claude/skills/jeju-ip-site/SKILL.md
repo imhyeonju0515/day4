@@ -17,6 +17,8 @@ Vite + React 18 SPA. 제주 이야기 자산(한라산·돌하르방·해녀·�
 - `api/pixabay.js` Vercel 서버리스 프록시(키 숨김). `q`, `per_page`(3~40), `page`(1~25), 한글이면 `lang=ko`, 24시간 캐시 헤더. Node 스타일 `res.statusCode/end` 라서 Vercel·로컬 모두 동작
 - `vite.config.js` 로컬 `npm run dev` 에서 `/api/pixabay` 를 같은 핸들러로 처리하는 플러그인
 - `supabase/schema.sql` `favorites` 테이블 + RLS (본인 행만 select/insert/delete, `user_id default auth.uid()`)
+- `supabase/cart.sql` `products`(누구나 조회) + `cart_items`(본인만 CRUD, `unique(user_id, product_id)`) + RLS + 샘플 상품 시드. 여러 번 실행해도 안전(`drop policy if exists`, 비어 있을 때만 insert)
+- `src/useCart.js`(장바구니 훅), `src/Shop.jsx`(제주 장터), `src/CartDrawer.jsx`(수량 조절·합계). 주문하기는 아직 안내 문구만(결제 미구현)
 - 스타일: `src/styles.css` (귤색 `#ff8a1f`, 바다색 `#169c8e`, 크림 배경, 제목 글꼴 Jua)
 
 ## 환경변수 (Vercel + 로컬 `.env`)
@@ -29,7 +31,7 @@ Vite + React 18 SPA. 제주 이야기 자산(한라산·돌하르방·해녀·�
 `service_role`/`secret` 키는 절대 사용·커밋 금지. `.env` 는 `.gitignore` 됨. 환경변수는 저장 **후** 재배포해야 적용.
 
 ## 설정 순서 (처음 한 번)
-1. Supabase SQL Editor 에 `supabase/schema.sql` 실행 (테이블명 `favorites`)
+1. Supabase SQL Editor 에 `supabase/schema.sql`, `supabase/cart.sql` 순서로 실행 (테이블 `favorites`, `products`, `cart_items`)
 2. Vercel: repo `day4` import, **Root Directory = `jeju-ip`**, 환경변수 3개 등록, Deploy
 3. Supabase → Authentication → URL Configuration: **Site URL** = Vercel 주소(끝 `/` 없음), Redirect URLs 에 `https://<주소>/**` (로컬용 `http://localhost:5173/**` 선택)
 4. 테스트 중엔 Authentication → Sign In / Providers → Email → **Confirm email 끄기** (공개 전엔 다시 켜고 커스텀 SMTP 연결)

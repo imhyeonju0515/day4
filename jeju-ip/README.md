@@ -12,7 +12,7 @@
 
 ## 설정 순서
 
-1. **Supabase 테이블 만들기:** Supabase → SQL Editor → `supabase/schema.sql` 내용을 붙여 넣고 Run.
+1. **Supabase 테이블 만들기:** Supabase → SQL Editor → `supabase/schema.sql`(즐겨찾기) 실행, 이어서 `supabase/cart.sql`(제주 장터·장바구니: `products`, `cart_items` + 샘플 상품 8개) 실행.
 2. **(테스트 편의) 이메일 확인 끄기:** Authentication → Sign In / Providers → Email → *Confirm email* 끄기. 켜 두면 가입 후 메일의 링크를 눌러야 로그인돼요.
 3. **로컬 실행:** `.env.example`을 `.env`로 복사해 값을 채우고
    ```bash
