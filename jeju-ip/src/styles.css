@@ -208,3 +208,25 @@ code { background: #ffeacb; padding: 1px 6px; border-radius: 6px; }
 .vt-src { margin: 12px 0 0; text-align: center; font-size: 12px; opacity: .65; }
 @media (max-width: 800px) { .vt-charts { grid-template-columns: 1fr; } }
 @media (max-width: 560px) { .vt-three { height: 420px; } .vt-legend { display: none; } .vt-chart-box { height: 260px; } .vt-player { gap: 8px; padding: 6px 10px; } }
+
+/* 메뉴 */
+.brand { text-decoration: none; }
+.menu { display: flex; gap: 6px; }
+.menu a { padding: 7px 14px; border-radius: 999px; font-weight: 700; font-size: 14px; color: var(--ink); text-decoration: none; white-space: nowrap; transition: background .15s; }
+.menu a:hover { background: #ffe9c8; }
+.menu a.on { background: linear-gradient(135deg, #ffb347, #ff7a12); color: #fff; box-shadow: 0 3px 10px rgba(255,122,18,.35); }
+.page-search { display: flex; gap: 8px; max-width: 520px; margin: 18px auto 0; padding: 6px; border-radius: 999px; background: #fff; box-shadow: 0 4px 14px rgba(120,60,0,.12); }
+.page-search input { flex: 1; min-width: 0; border: 0; padding: 8px 14px; background: transparent; }
+.page-search input:focus { outline: none; }
+.home-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin: 22px 0 10px; }
+.hcard { display: flex; flex-direction: column; gap: 6px; padding: 22px 20px; border-radius: 24px; background: #fff; color: var(--ink); text-decoration: none; box-shadow: 0 4px 16px rgba(120,60,0,.12); transition: transform .25s, box-shadow .25s; }
+.hcard:hover { transform: translateY(-5px); box-shadow: 0 14px 30px rgba(255,138,31,.32); }
+.hc-icon { display: grid; place-items: center; width: 64px; height: 64px; border-radius: 20px; font-size: 34px; background: linear-gradient(160deg, #fff0d6, #ffe2b0); }
+.hcard h2 { margin: 6px 0 0; font-family: var(--head); font-weight: 400; font-size: 24px; color: #a24800; }
+.hcard p { margin: 0; flex: 1; line-height: 1.55; opacity: .75; word-break: keep-all; }
+.hcard b { color: #d96a00; }
+@media (max-width: 900px) {
+  .top { flex-wrap: wrap; }
+  .menu { order: 3; width: 100%; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
+  .menu::-webkit-scrollbar { display: none; }
+}

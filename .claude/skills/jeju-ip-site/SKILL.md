@@ -8,7 +8,8 @@ description: Build, extend, deploy or debug the Jeju IP gallery in jeju-ip/ — 
 Vite + React 18 SPA. 제주 이야기 자산(한라산·돌하르방·해녀·감귤·유채꽃·조랑말) 사진 갤러리. 이메일 회원가입/로그인(Supabase), 로그인하면 사진 ❤️ 즐겨찾기. GitHub repo `imhyeonju0515/day4` 의 `jeju-ip/` 폴더, Vercel 배포 `https://day4-8djs.vercel.app`.
 
 ## 구조
-- `src/App.jsx` 헤더·3D 히어로·검색창·푸터, 세션(`onAuthStateChange`) 관리
+
+- `src/App.jsx` 헤더 메뉴(홈·사진 갤러리·관광 추이·제주 장터)와 해시 라우팅(`#/gallery`, `#/visitors`, `#/shop`, 라이브러리 없음). 홈 = 3D 히어로 + 날씨 + 메뉴 카드, 각 메뉴는 해당 섹션만 렌더(Hero3D·디오라마는 다른 메뉴에서 언마운트). 홈 검색 → 갤러리 메뉴로 이동. 장터 메뉴는 Supabase 설정이 있을 때만 표시
 - `src/Auth.jsx` 로그인/가입 모달 (오류를 쉬운 한국어로 변환, 제주풍 헤더)
 - `src/Gallery.jsx` 카테고리 칩 · 검색어 칩 · 20장씩 "더 보기" · 크게 보기(라이트박스) · 즐겨찾기 탭 · 스켈레톤
 - `src/Hero3D.jsx` Three.js (r160): 일렁이는 바다 + 한라산/오름 + 둥둥 뜬 감귤. `lazy` 로 분리 로드, 화면 밖이면 멈춤, `prefers-reduced-motion` 이면 정지 화면, 좁은 화면은 감귤 수·위치 조정
