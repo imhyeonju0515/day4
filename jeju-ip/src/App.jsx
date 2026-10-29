@@ -9,6 +9,8 @@ export default function App() {
   const [user, setUser] = useState(null)
   const [ready, setReady] = useState(!supabaseReady)
   const [showAuth, setShowAuth] = useState(false)
+  const [text, setText] = useState('')
+  const [searchTerm, setSearchTerm] = useState('')
 
   useEffect(() => {
     if (!supabaseReady) return
@@ -17,10 +19,18 @@ export default function App() {
     return () => sub.subscription.unsubscribe()
   }, [])
 
+  function search(e) {
+    e.preventDefault()
+    const q = text.trim()
+    if (!q) return
+    setSearchTerm(q)
+    document.getElementById('gallery')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
   return (
     <>
       <header className="top">
-        <div className="brand">🍊 제주 IP 갤러리</div>
+        <div className="brand"><span>🍊</span> 제주 IP 갤러리</div>
         <div className="who">
           {!ready ? null : user ? (
             <>
@@ -38,17 +48,24 @@ export default function App() {
           <Suspense fallback={null}><Hero3D /></Suspense>
           <div className="hero-text">
             <h1>바람·돌·바다의 섬,<br />제주의 이야기를 모아요</h1>
-            <p>돌하르방, 해녀, 감귤, 한라산… 제주 IP(이야기 자산)를 사진으로 둘러보고, 로그인하면 마음에 드는 사진을 즐겨찾기할 수 있어요.</p>
+            <p>돌하르방, 해녀, 감귤, 한라산… 제주의 모습을 사진으로 둘러보고 마음에 드는 건 ❤️ 담아 가세요.</p>
           </div>
+          <form className="hero-search" onSubmit={search} role="search">
+            <input value={text} onChange={e => setText(e.target.value)} placeholder="검색: 일출봉, 유채꽃, 해녀…" aria-label="사진 검색" maxLength={60} />
+            <button className="primary">검색</button>
+          </form>
         </section>
 
         {!supabaseReady && (
-          <p className="status err">Supabase 환경변수(VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY)가 아직 없어서 로그인 기능이 꺼져 있어요. README의 설정 순서를 따라 해 주세요.</p>
+          <p className="status err">Supabase 환경변수(VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY)가 아직 없어서 로그인 기능이 꺼져 있어요.</p>
         )}
-        <Gallery user={user} onNeedLogin={() => (supabaseReady ? setShowAuth(true) : alert('로그인 설정이 아직 안 되어 있어요.'))} />
+        <Gallery user={user} searchTerm={searchTerm} onNeedLogin={() => (supabaseReady ? setShowAuth(true) : alert('로그인 설정이 아직 안 되어 있어요.'))} />
       </main>
 
-      <footer>사진 출처: <a href="https://pixabay.com" target="_blank" rel="noreferrer">Pixabay</a></footer>
+      <footer>
+        <div className="foot-wave" aria-hidden="true" />
+        <p>🍊 제주의 바람과 귤향을 담아 · 사진 출처 <a href="https://pixabay.com" target="_blank" rel="noreferrer">Pixabay</a></p>
+      </footer>
       {showAuth && !user && <Auth onClose={() => setShowAuth(false)} />}
     </>
   )

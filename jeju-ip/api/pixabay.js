@@ -13,9 +13,11 @@ export default async function handler(req, res) {
   const q = (params.get('q') || 'Jeju Island').slice(0, 100)
   const perPage = Math.min(Math.max(Number(params.get('per_page')) || 12, 3), 40)
 
+  const page = Math.min(Math.max(Number(params.get('page')) || 1, 1), 25)
   const url = new URL('https://pixabay.com/api/')
   url.search = new URLSearchParams({
-    key, q, image_type: 'photo', orientation: 'horizontal', safesearch: 'true', per_page: String(perPage),
+    key, q, image_type: 'photo', safesearch: 'true', per_page: String(perPage), page: String(page),
+    lang: /[가-힣]/.test(q) ? 'ko' : 'en', // 한글로 검색해도 되도록
   })
 
   try {
