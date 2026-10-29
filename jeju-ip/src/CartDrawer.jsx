@@ -1,4 +1,5 @@
 import { won } from './useCart.js'
+import ProductImg from './ProductImg.jsx'
 
 export default function CartDrawer({ cart, onClose }) {
   const { items, total, count, setQty, remove } = cart
@@ -16,7 +17,7 @@ export default function CartDrawer({ cart, onClose }) {
           <ul className="cart-list">
             {items.map(i => (
               <li key={i.id}>
-                <span className="c-emoji">{i.product.emoji}</span>
+                <span className="c-emoji"><ProductImg name={i.product.name} emoji={i.product.emoji} /></span>
                 <div className="c-info">
                   <b>{i.product.name}</b>
                   <small>{i.product.unit} · {won(i.product.price)}</small>

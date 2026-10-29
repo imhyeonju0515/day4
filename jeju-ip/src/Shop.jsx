@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { supabase } from './supabase.js'
 import { won } from './useCart.js'
+import ProductImg from './ProductImg.jsx'
 
 // 제주 장터: 상품 목록 + 장바구니 담기
 export default function Shop({ user, cart, onNeedLogin }) {
@@ -29,7 +30,7 @@ export default function Shop({ user, cart, onNeedLogin }) {
       <div className="products">
         {products.map(p => (
           <article key={p.id} className="product">
-            <div className="p-emoji" aria-hidden="true">{p.emoji}</div>
+            <div className="p-emoji"><ProductImg name={p.name} emoji={p.emoji} /></div>
             <h3>{p.name}</h3>
             <p className="p-desc">{p.description}</p>
             <div className="p-foot">

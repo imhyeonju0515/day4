@@ -150,3 +150,13 @@ code { background: #ffeacb; padding: 1px 6px; border-radius: 6px; }
   .p-foot { flex-direction: column; align-items: stretch; }
   .p-foot button { width: 100%; }
 }
+
+/* 상품 실제 사진 */
+.p-emoji { height: 140px; overflow: hidden; padding: 0; }
+.p-emoji img, .c-emoji img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.p-emoji .fallback { font-size: 52px; }
+.c-emoji { overflow: hidden; padding: 0; }
+.c-emoji .fallback { font-size: 30px; }
+.product:hover .p-emoji img { transform: scale(1.08); }
+.p-emoji img { transition: transform .5s; }
+@media (max-width: 560px) { .p-emoji { height: 96px; } .p-emoji .fallback { font-size: 40px; } }
