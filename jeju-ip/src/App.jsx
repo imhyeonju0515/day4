@@ -3,6 +3,7 @@ import { supabase, supabaseReady } from './supabase.js'
 import Auth from './Auth.jsx'
 import Gallery from './Gallery.jsx'
 import Shop from './Shop.jsx'
+import Weather from './Weather.jsx'
 import CartDrawer from './CartDrawer.jsx'
 import { useCart } from './useCart.js'
 
@@ -68,6 +69,7 @@ export default function App() {
         {!supabaseReady && (
           <p className="status err">Supabase 환경변수(VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY)가 아직 없어서 로그인 기능이 꺼져 있어요.</p>
         )}
+        <Weather />
         {supabaseReady && <Shop user={user} cart={cart} onNeedLogin={needLogin} />}
         <Gallery user={user} searchTerm={searchTerm} onNeedLogin={needLogin} />
       </main>

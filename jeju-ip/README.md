@@ -9,6 +9,7 @@
 | `VITE_SUPABASE_URL` | Supabase → Project Settings → API → Project URL | 브라우저 OK |
 | `VITE_SUPABASE_ANON_KEY` | 같은 화면의 `anon` (또는 `publishable`) key. **`service_role` 키는 절대 쓰지 마세요** | 브라우저 OK |
 | `PIXABAY_API_KEY` | https://pixabay.com/api/docs/ 로그인 후 "Your API key" | 서버 전용 (`VITE_` 붙이지 않기) |
+| `DATA_GO_KR_KEY` | data.go.kr → 마이페이지 → 개발계정 → 기상청 단기예보 → 일반 인증키(Decoding 권장, Encoding 도 자동 처리) | 서버 전용 (secret) |
 
 ## 설정 순서
 

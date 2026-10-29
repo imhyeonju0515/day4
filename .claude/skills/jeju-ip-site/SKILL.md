@@ -15,6 +15,7 @@ Vite + React 18 SPA. 제주 이야기 자산(한라산·돌하르방·해녀·�
 - `src/jejuData.js` 카테고리와 Pixabay 검색어
 - `src/supabase.js` 환경변수 없으면 `supabaseReady=false` → 로그인 UI 숨기고 안내 문구
 - `api/pixabay.js` Vercel 서버리스 프록시(키 숨김). `q`, `per_page`(3~40), `page`(1~25), 한글이면 `lang=ko`, 24시간 캐시 헤더. Node 스타일 `res.statusCode/end` 라서 Vercel·로컬 모두 동작
+- `api/weather.js` 기상청 `VilageFcstInfoService_2.0/getUltraSrtNcst`(초단기실황) 프록시. 매시 정각 기준·40분 이후 제공이라 40분 전이면 한 시간 전 자료 요청(KST 보정). 격자 제주시 (53,38), 서귀포시 (52,33). 키 오류는 XML 로 와서 `returnAuthMsg` 를 추출. `src/Weather.jsx` 가 히어로 아래에 표시
 - `vite.config.js` 로컬 `npm run dev` 에서 `/api/pixabay` 를 같은 핸들러로 처리하는 플러그인
 - `supabase/schema.sql` `favorites` 테이블 + RLS (본인 행만 select/insert/delete, `user_id default auth.uid()`)
 - `supabase/cart.sql` `products`(누구나 조회) + `cart_items`(본인만 CRUD, `unique(user_id, product_id)`) + RLS + 샘플 상품 시드. 여러 번 실행해도 안전(`drop policy if exists`, 비어 있을 때만 insert)
@@ -27,6 +28,7 @@ Vite + React 18 SPA. 제주 이야기 자산(한라산·돌하르방·해녀·�
 | `VITE_SUPABASE_URL` | `https://<project-ref>.supabase.co` (**경로 없이 도메인만**) | config |
 | `VITE_SUPABASE_ANON_KEY` | anon 또는 `sb_publishable_…` | config |
 | `PIXABAY_API_KEY` | pixabay.com/api/docs | secret (`VITE_` 금지) |
+| `DATA_GO_KR_KEY` | data.go.kr 인증키(날씨) | secret (`VITE_` 금지) |
 
 `service_role`/`secret` 키는 절대 사용·커밋 금지. `.env` 는 `.gitignore` 됨. 환경변수는 저장 **후** 재배포해야 적용.
 
