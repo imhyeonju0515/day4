@@ -15,6 +15,8 @@
     background: linear-gradient(135deg, #ff9a4a, #4a7dff);
     box-shadow: 0 0 24px rgba(90, 140, 255, 0.5); transition: transform .2s, box-shadow .2s;
   }
+  .btns { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+  a.btn.jeju { background: linear-gradient(135deg, #ff9a4a, #2fb5a0); }
   a.btn:hover { transform: scale(1.06); box-shadow: 0 0 36px rgba(255, 150, 80, 0.7); }
 </style>
 </head>
@@ -22,7 +24,10 @@
 <main>
   <h1>🚀 Space Journey</h1>
   <p>Three.js로 만든 은하와 우주선 애니메이션</p>
-  <a class="btn" href="space.html">우주 실행하기</a>
+  <div class="btns">
+    <a class="btn" href="space.html">우주 실행하기</a>
+    <a class="btn jeju" href="jeju.html">🍊 제주 보기</a>
+  </div>
 </main>
 </body>
 </html>

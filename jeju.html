@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jeju Island</title>
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #bfe3dd; }
+  canvas { display: block; }
+  #info {
+    position: fixed; left: 20px; top: 16px; color: #14424d; font-family: system-ui, sans-serif;
+    pointer-events: none; text-shadow: 0 1px 8px rgba(255,255,255,.6);
+  }
+  #info h1 { margin: 0; font-size: clamp(26px, 5vw, 44px); letter-spacing: .04em; }
+  #info p { margin: 4px 0 0; font-size: 14px; }
+  #back { position: fixed; right: 16px; top: 16px; color: #14424d; font: 14px system-ui, sans-serif; text-decoration: none;
+    background: rgba(255,255,255,.6); padding: 6px 14px; border-radius: 999px; }
+  #hint { position: fixed; left: 20px; bottom: 14px; color: #3b6a73; font: 13px system-ui, sans-serif; pointer-events: none; }
+</style>
+</head>
+<body>
+<div id="info">
+  <h1>제주 · Jeju Island</h1>
+  <p>한라산 · 오름 · 돌하르방 · 감귤나무 · 유채꽃 · 해녀의 테왁</p>
+</div>
+<a id="back" href="index.html">← 처음으로</a>
+<div id="hint">드래그: 회전 · 휠: 확대/축소</div>
+
+<script type="importmap">
+{ "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+// ---- 기본 구성 (webgl_animation_keyframes 예제와 동일한 뼈대) ----
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(innerWidth, innerHeight);
+document.body.appendChild(renderer.domElement);
+
+const pmrem = new THREE.PMREMGenerator(renderer);
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0xbfe3dd);
+scene.environment = pmrem.fromScene(new RoomEnvironment(renderer), 0.04).texture;
+scene.fog = new THREE.Fog(0xbfe3dd, 22, 45);
+
+const camera = new THREE.PerspectiveCamera(40, innerWidth / innerHeight, 1, 100);
+camera.position.set(10, 6.5, 12);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.target.set(0, 1, 0);
+controls.enablePan = false;
+controls.enableDamping = true;
+controls.autoRotate = true;
+controls.autoRotateSpeed = 0.4;
+controls.maxPolarAngle = Math.PI * 0.49;
+controls.minDistance = 6;
+controls.maxDistance = 30;
+
+const sun = new THREE.DirectionalLight(0xfff4d6, 1.6);
+sun.position.set(6, 10, 4);
+scene.add(sun);
+
+// ---- 디오라마 바닥 + 바다 ----
+const block = new THREE.Mesh(
+  new THREE.BoxGeometry(12, 0.8, 12),
+  new THREE.MeshStandardMaterial({ color: 0x2b6d86, roughness: 0.6 })
+);
+block.position.y = -0.45;
+scene.add(block);
+
+const seaGeo = new THREE.PlaneGeometry(12, 12, 60, 60);
+seaGeo.rotateX(-Math.PI / 2);
+const seaBase = seaGeo.attributes.position.array.slice();
+const sea = new THREE.Mesh(seaGeo, new THREE.MeshStandardMaterial({
+  color: 0x3fb4d4, roughness: 0.15, metalness: 0.1, flatShading: true, transparent: true, opacity: 0.93
+}));
+sea.position.y = -0.03;
+scene.add(sea);
+
+// ---- 제주도 본섬 + 한라산 (회전체) ----
+const profile = [[4.4, -0.2], [4.2, 0], [3.6, 0.25], [2.8, 0.6], [1.6, 1.5], [0.9, 2.3], [0.55, 2.6], [0.42, 2.45], [0.01, 2.45]];
+const islandGeo = new THREE.LatheGeometry(profile.map(([r, y]) => new THREE.Vector2(r, y)), 96);
+const colors = [];
+const cLow = new THREE.Color(0xe6d9a8), cMid = new THREE.Color(0x6fb357), cHigh = new THREE.Color(0x3f8a49), cTop = new THREE.Color(0x8c7b6b);
+const pa = islandGeo.attributes.position;
+for (let i = 0; i < pa.count; i++) {
+  const y = pa.getY(i);
+  const c = new THREE.Color();
+  if (y < 0.15) c.copy(cLow);
+  else if (y < 0.7) c.copy(cLow).lerp(cMid, (y - 0.15) / 0.55);
+  else if (y < 1.9) c.copy(cMid).lerp(cHigh, (y - 0.7) / 1.2);
+  else c.copy(cHigh).lerp(cTop, Math.min(1, (y - 1.9) / 0.5));
+  colors.push(c.r, c.g, c.b);
+}
+islandGeo.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+const island = new THREE.Mesh(islandGeo, new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.9, side: THREE.DoubleSide }));
+scene.add(island);
+
+// 백록담
+const lake = new THREE.Mesh(new THREE.CircleGeometry(0.4, 32), new THREE.MeshStandardMaterial({ color: 0x4ec6e8, roughness: 0.1 }));
+lake.rotation.x = -Math.PI / 2;
+lake.position.y = 2.46;
+scene.add(lake);
+
+// 반경 r에서의 지형 높이
+const hs = [[0.42, 2.45], [0.55, 2.6], [0.9, 2.3], [1.6, 1.5], [2.8, 0.6], [3.6, 0.25], [4.2, 0]];
+function heightAt(r) {
+  if (r <= hs[0][0]) return hs[0][1];
+  for (let i = 1; i < hs.length; i++) {
+    if (r <= hs[i][0]) {
+      const [r0, y0] = hs[i - 1], [r1, y1] = hs[i];
+      return y0 + (y1 - y0) * (r - r0) / (r1 - r0);
+    }
+  }
+  return 0;
+}
+const place = (obj, r, a, lift = 0) => {
+  obj.position.set(Math.cos(a) * r, heightAt(r) + lift, Math.sin(a) * r);
+  scene.add(obj);
+  return obj;
+};
+
+// 오름(작은 기생화산)
+for (const [r, a, s] of [[3.0, 2.6, 0.55], [3.4, 4.2, 0.45], [2.4, 5.4, 0.4]]) {
+  const o = new THREE.Mesh(
+    new THREE.ConeGeometry(s, s * 1.1, 24),
+    new THREE.MeshStandardMaterial({ color: 0x5aa14f, roughness: 0.9 })
+  );
+  place(o, r, a, s * 0.45);
+}
+
+// 감귤나무
+const trunkMat = new THREE.MeshStandardMaterial({ color: 0x6b4a2e, roughness: 1 });
+const leafMat = new THREE.MeshStandardMaterial({ color: 0x2f8f3e, roughness: 0.8 });
+const orangeMat = new THREE.MeshStandardMaterial({ color: 0xff8a1f, roughness: 0.5 });
+for (let i = 0; i < 16; i++) {
+  const t = new THREE.Group();
+  const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.04, 0.2, 6), trunkMat);
+  trunk.position.y = 0.1;
+  const crown = new THREE.Mesh(new THREE.SphereGeometry(0.17, 12, 12), leafMat);
+  crown.position.y = 0.3;
+  t.add(trunk, crown);
+  for (let k = 0; k < 4; k++) {
+    const f = new THREE.Mesh(new THREE.SphereGeometry(0.045, 8, 8), orangeMat);
+    const ang = Math.random() * 6.28;
+    f.position.set(Math.cos(ang) * 0.15, 0.3 + (Math.random() - 0.4) * 0.15, Math.sin(ang) * 0.15);
+    t.add(f);
+  }
+  place(t, 3.0 + Math.random() * 0.7, -0.3 + i * 0.32 + Math.random() * 0.1);
+  if (i % 4 === 3) t.visible = false;   // 일부 구역은 비워서 유채밭 자리로
+}
+
+// 유채꽃밭
+{
+  const n = 600, p = new Float32Array(n * 3);
+  for (let i = 0; i < n; i++) {
+    const a = 0.6 + Math.random() * 1.4 + (i % 2 ? 3.3 : 0), r = 3.4 + Math.random() * 0.7;
+    p.set([Math.cos(a) * r, heightAt(r) + 0.04, Math.sin(a) * r], i * 3);
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.BufferAttribute(p, 3));
+  scene.add(new THREE.Points(g, new THREE.PointsMaterial({ color: 0xffd42a, size: 0.07 })));
+}
+
+// 돌하르방
+{
+  const stone = new THREE.MeshStandardMaterial({ color: 0x4a4a4e, roughness: 1, flatShading: true });
+  const d = new THREE.Group();
+  const body = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.28, 0.6, 12), stone);
+  body.position.y = 0.3;
+  const head = new THREE.Mesh(new THREE.SphereGeometry(0.22, 14, 14), stone);
+  head.position.y = 0.78; head.scale.y = 1.1;
+  const hat = new THREE.Mesh(new THREE.CylinderGeometry(0.17, 0.25, 0.14, 14), stone);
+  hat.position.y = 1.0;
+  const nose = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.12, 0.06), stone);
+  nose.position.set(0, 0.76, 0.21);
+  const eyeMat = new THREE.MeshStandardMaterial({ color: 0x111111 });
+  const eL = new THREE.Mesh(new THREE.SphereGeometry(0.03, 8, 8), eyeMat), eR = eL.clone();
+  eL.position.set(-0.08, 0.84, 0.19); eR.position.set(0.08, 0.84, 0.19);
+  const armL = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.3, 0.07), stone), armR = armL.clone();
+  armL.position.set(-0.2, 0.45, 0.14); armR.position.set(0.2, 0.55, 0.14);
+  armL.rotation.x = -0.6; armR.rotation.x = -0.6;
+  d.add(body, head, hat, nose, eL, eR, armL, armR);
+  d.scale.setScalar(0.7);
+  place(d, 3.6, 0.55, -0.02);
+  d.rotation.y = -0.55 + Math.PI / 2;   // 바다 방향을 바라봄
+}
+
+// ---- 움직이는 것들: AnimationMixer + KeyframeTrack (예제의 mixer.clipAction 방식) ----
+const clips = [];
+const TAU = Math.PI * 2;
+
+// 배: 섬 둘레를 항해
+const boat = new THREE.Group();
+boat.name = 'boat';
+{
+  const hull = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.12, 0.7), new THREE.MeshStandardMaterial({ color: 0xf5f5f0, roughness: 0.5 }));
+  const stripe = new THREE.Mesh(new THREE.BoxGeometry(0.29, 0.03, 0.71), new THREE.MeshStandardMaterial({ color: 0xd8432f }));
+  stripe.position.y = 0.02;
+  const mast = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, 0.7, 6), trunkMat);
+  mast.position.y = 0.4;
+  const sail = new THREE.Mesh(new THREE.ConeGeometry(0.26, 0.6, 3), new THREE.MeshStandardMaterial({ color: 0xfff0d0, side: THREE.DoubleSide }));
+  sail.scale.z = 0.04; sail.position.set(0, 0.42, 0.02); sail.rotation.y = Math.PI / 2;
+  boat.add(hull, stripe, mast, sail);
+  scene.add(boat);
+}
+function orbitTracks(name, radius, phase, y, bobAmp, dur, sign = 1) {
+  const n = 80, times = [], pos = [], rot = [];
+  for (let i = 0; i <= n; i++) {
+    const f = i / n, a = phase + sign * f * TAU;
+    times.push(f * dur);
+    pos.push(Math.cos(a) * radius, y + bobAmp * Math.sin(f * TAU * 8), Math.sin(a) * radius);
+    rot.push(sign > 0 ? -a : -a + Math.PI);
+  }
+  return [
+    new THREE.VectorKeyframeTrack(`${name}.position`, times, pos),
+    new THREE.NumberKeyframeTrack(`${name}.rotation[y]`, times, rot),
+  ];
+}
+clips.push(new THREE.AnimationClip('sail', 36, orbitTracks('boat', 5.2, 0, 0.07, 0.03, 36)));
+
+// 갈매기: 날개짓 + 선회
+const gullTracks = [], flapTracks = [];
+const gullMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.6 });
+for (let i = 0; i < 4; i++) {
+  const g = new THREE.Group();
+  g.name = `gull${i}`;
+  const body = new THREE.Mesh(new THREE.ConeGeometry(0.06, 0.3, 8), gullMat);
+  body.rotation.x = Math.PI / 2;
+  g.add(body);
+  for (const side of [-1, 1]) {
+    const pivot = new THREE.Group();
+    pivot.name = `gull${i}${side < 0 ? 'L' : 'R'}`;
+    pivot.position.x = side * 0.04;
+    const wing = new THREE.Mesh(new THREE.BoxGeometry(0.36, 0.012, 0.12), gullMat);
+    wing.position.x = side * 0.18;
+    pivot.add(wing);
+    g.add(pivot);
+    flapTracks.push(new THREE.NumberKeyframeTrack(`${pivot.name}.rotation[z]`, [0, 0.25, 0.5], [side < 0 ? 0.55 : -0.55, side < 0 ? -0.55 : 0.55, side < 0 ? 0.55 : -0.55]));
+  }
+  scene.add(g);
+  gullTracks.push(...orbitTracks(g.name, 3.2 + i * 0.8, i * 1.7, 3 + i * 0.35, 0.12, 22 + i * 3, i % 2 ? -1 : 1));
+}
+clips.push(new THREE.AnimationClip('gulls', 34, gullTracks));
+clips.push(new THREE.AnimationClip('flap', 0.5, flapTracks));
+
+// 구름: 느리게 흐름
+const cloudTracks = [];
+const cloudMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 1, transparent: true, opacity: 0.95 });
+for (let i = 0; i < 4; i++) {
+  const c = new THREE.Group();
+  c.name = `cloud${i}`;
+  for (const [x, y, z, s] of [[0, 0, 0, 0.5], [0.45, -0.05, 0.1, 0.38], [-0.45, -0.08, -0.05, 0.36], [0.1, 0.12, -0.1, 0.35]]) {
+    const m = new THREE.Mesh(new THREE.SphereGeometry(s, 14, 14), cloudMat);
+    m.position.set(x, y, z);
+    c.add(m);
+  }
+  scene.add(c);
+  cloudTracks.push(...orbitTracks(c.name, 4 + i * 0.9, i * 1.6, 4.6 + (i % 2) * 0.6, 0, 70 + i * 10));
+}
+clips.push(new THREE.AnimationClip('clouds', 100, cloudTracks));
+
+// 해녀의 테왁: 파도에 출렁임
+const tewakTracks = [];
+for (let i = 0; i < 5; i++) {
+  const t = new THREE.Group();
+  t.name = `tewak${i}`;
+  const ball = new THREE.Mesh(new THREE.SphereGeometry(0.1, 14, 14), new THREE.MeshStandardMaterial({ color: 0xff7a1a, roughness: 0.4 }));
+  const net = new THREE.Mesh(new THREE.SphereGeometry(0.115, 10, 8, 0, TAU, Math.PI * 0.55, Math.PI * 0.45), new THREE.MeshBasicMaterial({ color: 0x223344, wireframe: true }));
+  t.add(ball, net);
+  const a = 3.9 + i * 0.35, r = 4.75 + (i % 2) * 0.25;
+  t.position.set(Math.cos(a) * r, 0.04, Math.sin(a) * r);
+  scene.add(t);
+  const times = [0, 0.5, 1, 1.5, 2], vals = times.map(x => 0.05 + 0.04 * Math.sin(x * Math.PI + i * 1.3));
+  tewakTracks.push(new THREE.NumberKeyframeTrack(`${t.name}.position[y]`, times, vals));
+}
+clips.push(new THREE.AnimationClip('tewak', 2, tewakTracks));
+
+const mixer = new THREE.AnimationMixer(scene);
+clips.forEach(c => mixer.clipAction(c).play());
+
+// ---- 루프 ----
+const clock = new THREE.Clock();
+renderer.setAnimationLoop(() => {
+  const delta = clock.getDelta(), t = clock.elapsedTime;
+  mixer.update(delta);
+
+  const p = seaGeo.attributes.position;
+  for (let i = 0; i < p.count; i++) {
+    const x = seaBase[i * 3], z = seaBase[i * 3 + 2];
+    p.setY(i, Math.sin(x * 1.2 + t * 1.6) * 0.04 + Math.cos(z * 1.5 + t * 1.2) * 0.04);
+  }
+  p.needsUpdate = true;
+
+  controls.update();
+  renderer.render(scene, camera);
+});
+
+addEventListener('resize', () => {
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+});
+</script>
+</body>
+</html>
