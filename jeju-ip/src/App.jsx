@@ -1,7 +1,9 @@
-import { useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import { supabase, supabaseReady } from './supabase.js'
 import Auth from './Auth.jsx'
 import Gallery from './Gallery.jsx'
+
+const Hero3D = lazy(() => import('./Hero3D.jsx'))
 
 export default function App() {
   const [user, setUser] = useState(null)
@@ -33,8 +35,11 @@ export default function App() {
 
       <main>
         <section className="hero">
-          <h1>바람·돌·바다의 섬,<br />제주의 이야기를 모아요</h1>
-          <p>돌하르방, 해녀, 감귤, 한라산… 제주 IP(이야기 자산)를 사진으로 둘러보고, 로그인하면 마음에 드는 사진을 즐겨찾기할 수 있어요.</p>
+          <Suspense fallback={null}><Hero3D /></Suspense>
+          <div className="hero-text">
+            <h1>바람·돌·바다의 섬,<br />제주의 이야기를 모아요</h1>
+            <p>돌하르방, 해녀, 감귤, 한라산… 제주 IP(이야기 자산)를 사진으로 둘러보고, 로그인하면 마음에 드는 사진을 즐겨찾기할 수 있어요.</p>
+          </div>
         </section>
 
         {!supabaseReady && (
