@@ -38,7 +38,14 @@ export default function Auth({ onClose }) {
     <div className="modal" onClick={onClose}>
       <form className="card auth" onClick={e => e.stopPropagation()} onSubmit={submit}>
         <button type="button" className="x" onClick={onClose} aria-label="닫기">✕</button>
-        <h2>{mode === 'login' ? '로그인' : '회원가입'}</h2>
+        <div className="auth-head">
+          <span className="auth-fruit">🍊</span>
+          <h2>{mode === 'login' ? '어서 오세요, 혼저옵서예!' : '제주 식구가 되어 주세요'}</h2>
+          <p>{mode === 'login' ? '로그인하면 마음에 드는 사진을 ❤️ 즐겨찾기할 수 있어요' : '이메일만 있으면 1분이면 가입돼요'}</p>
+          <svg className="wave" viewBox="0 0 400 24" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M0 12 C 50 0, 100 24, 150 12 S 250 0, 300 12 S 380 20, 400 10 V24 H0 Z" fill="#fff" />
+          </svg>
+        </div>
         <div className="tabs">
           <button type="button" className={mode === 'login' ? 'on' : ''} onClick={() => setMode('login')}>로그인</button>
           <button type="button" className={mode === 'signup' ? 'on' : ''} onClick={() => setMode('signup')}>회원가입</button>
