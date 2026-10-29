@@ -173,42 +173,6 @@ code { background: #ffeacb; padding: 1px 6px; border-radius: 6px; }
 .w-msg { margin: 0; font-size: 13px; opacity: .65; }
 @media (max-width: 560px) { .weather { border-radius: 22px; } }
 
-/* 서귀포 관광지 관람객 추이 */
-.vt { padding-top: 22px; }
-.vt-notice { margin: 10px 0; padding: 12px 16px; border-radius: 14px; background: #fff1cc; text-align: center; font-size: 14px; }
-.vt-notice.err { background: #ffe3df; color: #8f2a1c; }
-.vt-notice small { opacity: .85; line-height: 1.7; }
-.vt-stage { position: relative; padding-bottom: 30px; border-radius: 28px; overflow: hidden; background: linear-gradient(#ffe6b8 0%, #c8ecef 55%, #8fd8d0 100%); box-shadow: 0 10px 32px rgba(255,138,31,.25); }
-.vt-three { height: clamp(380px, 56vw, 540px); }
-.vt-three canvas { display: block; width: 100%; height: 100%; touch-action: pan-y; cursor: grab; }
-.no3d { padding: 60px 20px; text-align: center; }
-.vt-hud { position: absolute; left: 16px; top: 14px; pointer-events: none; }
-.vt-when { font-family: var(--head); font-size: clamp(26px, 5vw, 38px); color: #a24800; text-shadow: 0 2px 0 rgba(255,255,255,.7); }
-.vt-peak { margin-top: 2px; display: inline-block; font-size: 13px; background: rgba(255,255,255,.85); padding: 4px 12px; border-radius: 999px; }
-.vt-legend { position: absolute; right: 16px; top: 18px; display: flex; align-items: center; gap: 6px; font-size: 12px; background: rgba(255,255,255,.85); padding: 4px 12px; border-radius: 999px; }
-.vt-legend i { width: 70px; height: 8px; border-radius: 4px; background: linear-gradient(90deg, hsl(173 78% 52%), hsl(86 78% 52%), hsl(40 78% 52%), hsl(0 78% 52%)); }
-.vt-player { position: absolute; left: 16px; right: 16px; bottom: 44px; display: flex; align-items: center; gap: 12px; padding: 8px 14px; border-radius: 999px; background: rgba(255,255,255,.93); box-shadow: 0 4px 14px rgba(15,95,92,.25); }
-.vt-player button { width: 40px; height: 40px; padding: 0; font-size: 16px; color: #fff; background: linear-gradient(135deg, #ffb347, #ff7a12); box-shadow: none; flex: none; }
-.vt-player input { flex: 1; min-width: 0; padding: 0; border: 0; accent-color: var(--tan); }
-.vt-hint { position: absolute; left: 0; right: 0; bottom: 8px; margin: 0; text-align: center; font-size: 12px; color: #2b5b57; pointer-events: none; }
-.vt-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 18px 0 16px; }
-.vt-chips button { display: inline-flex; align-items: center; gap: 7px; background: #fff; border: 1px solid var(--line); box-shadow: none; opacity: .55; font-weight: 600; padding: 8px 15px; }
-.vt-chips button i { width: 11px; height: 11px; border-radius: 50%; }
-.vt-chips button.on { opacity: 1; border-color: var(--tan); box-shadow: 0 2px 8px rgba(255,138,31,.3); }
-.vt-chips .all { background: var(--tan); color: #fff; border-color: var(--tan); opacity: .6; }
-.vt-chips .all.on { opacity: 1; }
-.vt-charts { display: grid; grid-template-columns: 1.6fr 1fr; gap: 16px; }
-.vt-card { padding: 18px; border-radius: 22px; background: #fff; box-shadow: 0 4px 16px rgba(120,60,0,.1); min-width: 0; }
-.vt-card h3 { margin: 0 0 12px; font-family: var(--head); font-weight: 400; font-size: 21px; color: #a24800; }
-.vt-chart-box { position: relative; height: 320px; }
-.vt-chart-box.short { height: 230px; }
-.vt-tip { margin: 12px 0 0; line-height: 1.8; font-size: 15px; }
-.vt-tip small { display: block; opacity: .6; font-size: 12px; }
-.vt-tip .busy { color: #d6451f; } .vt-tip .quiet { color: #169c8e; }
-.vt-src { margin: 12px 0 0; text-align: center; font-size: 12px; opacity: .65; }
-@media (max-width: 800px) { .vt-charts { grid-template-columns: 1fr; } }
-@media (max-width: 560px) { .vt-three { height: 420px; } .vt-legend { display: none; } .vt-chart-box { height: 260px; } .vt-player { gap: 8px; padding: 6px 10px; } }
-
 /* 메뉴 */
 .brand { text-decoration: none; }
 .menu { display: flex; gap: 6px; }
@@ -230,3 +194,21 @@ code { background: #ffeacb; padding: 1px 6px; border-radius: 6px; }
   .menu { order: 3; width: 100%; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
   .menu::-webkit-scrollbar { display: none; }
 }
+
+/* 3D 제주 경관 */
+.sc { padding-top: 22px; }
+.sc-stage { position: relative; padding-bottom: 30px; border-radius: 28px; overflow: hidden; background: linear-gradient(#ffe6b8 0%, #c8ecef 55%, #8fd8d0 100%); box-shadow: 0 10px 32px rgba(255,138,31,.25); }
+.sc-three { height: clamp(380px, 58vw, 580px); }
+.sc-three canvas { display: block; width: 100%; height: 100%; touch-action: pan-y; cursor: grab; }
+.no3d { padding: 60px 20px; text-align: center; }
+.sc-home { position: absolute; right: 14px; top: 14px; padding: 7px 14px; font-size: 13px; font-weight: 700; background: rgba(255,255,255,.92); }
+.sc-hint { position: absolute; left: 0; right: 0; bottom: 8px; margin: 0; text-align: center; font-size: 12px; color: #2b5b57; pointer-events: none; }
+.sc-info { display: flex; align-items: center; justify-content: center; gap: 14px; min-height: 76px; margin: 16px 0 12px; padding: 12px 18px; border-radius: 20px; background: #fff; box-shadow: 0 4px 16px rgba(120,60,0,.1); text-align: left; }
+.sc-info > span { font-size: 40px; }
+.sc-info b { font-family: var(--head); font-weight: 400; font-size: 22px; color: #a24800; }
+.sc-info p { margin: 2px 0 0; line-height: 1.5; opacity: .8; word-break: keep-all; }
+.sc-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+.sc-chips button { background: #fff; border: 1px solid var(--line); box-shadow: none; padding: 8px 14px; font-weight: 600; }
+.sc-chips button:hover { background: #fff0db; }
+.sc-chips button.on { background: var(--tan); border-color: var(--tan); color: #fff; box-shadow: 0 3px 10px rgba(255,138,31,.4); }
+@media (max-width: 560px) { .sc-three { height: 420px; } .sc-hint { font-size: 11px; } }

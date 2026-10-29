@@ -9,7 +9,7 @@ Vite + React 18 SPA. 제주 이야기 자산(한라산·돌하르방·해녀·�
 
 ## 구조
 
-- `src/App.jsx` 헤더 메뉴(홈·사진 갤러리·관광 추이·제주 장터)와 해시 라우팅(`#/gallery`, `#/visitors`, `#/shop`, 라이브러리 없음). 홈 = 3D 히어로 + 날씨 + 메뉴 카드, 각 메뉴는 해당 섹션만 렌더(Hero3D·디오라마는 다른 메뉴에서 언마운트). 홈 검색 → 갤러리 메뉴로 이동. 장터 메뉴는 Supabase 설정이 있을 때만 표시
+- `src/App.jsx` 헤더 메뉴(홈·사진 갤러리·3D 경관·제주 장터)와 해시 라우팅(`#/gallery`, `#/scenery`, `#/shop`, 라이브러리 없음). 홈 = 3D 히어로 + 날씨 + 메뉴 카드, 각 메뉴는 해당 섹션만 렌더(Hero3D·디오라마는 다른 메뉴에서 언마운트). 홈 검색 → 갤러리 메뉴로 이동. 장터 메뉴는 Supabase 설정이 있을 때만 표시
 - `src/Auth.jsx` 로그인/가입 모달 (오류를 쉬운 한국어로 변환, 제주풍 헤더)
 - `src/Gallery.jsx` 카테고리 칩 · 검색어 칩 · 20장씩 "더 보기" · 크게 보기(라이트박스) · 즐겨찾기 탭 · 스켈레톤
 - `src/Hero3D.jsx` Three.js (r160): 일렁이는 바다 + 한라산/오름 + 둥둥 뜬 감귤. `lazy` 로 분리 로드, 화면 밖이면 멈춤, `prefers-reduced-motion` 이면 정지 화면, 좁은 화면은 감귤 수·위치 조정
@@ -17,7 +17,7 @@ Vite + React 18 SPA. 제주 이야기 자산(한라산·돌하르방·해녀·�
 - `src/supabase.js` 환경변수 없으면 `supabaseReady=false` → 로그인 UI 숨기고 안내 문구
 - `api/pixabay.js` Vercel 서버리스 프록시(키 숨김). `q`, `per_page`(3~40), `page`(1~25), 한글이면 `lang=ko`, 24시간 캐시 헤더. Node 스타일 `res.statusCode/end` 라서 Vercel·로컬 모두 동작
 - `api/weather.js` 기상청 `VilageFcstInfoService_2.0/getUltraSrtNcst`(초단기실황) 프록시. 매시 정각 기준·40분 이후 제공이라 40분 전이면 한 시간 전 자료 요청(KST 보정). 격자 제주시 (53,38), 서귀포시 (52,33). 키 오류는 XML 로 와서 `returnAuthMsg` 를 추출. `src/Weather.jsx` 가 히어로 아래에 표시
-- `api/visitors.js` + `src/Visitors.jsx` + `src/visitors/{diorama,charts,data}.js` 서귀포 직영관광지 월별 관람객(odcloud `15125100`) → 3D 디오라마 기둥 + Chart.js 차트. `?demo=1` 이면 가짜 샘플. 같은 `DATA_GO_KR_KEY` 사용(데이터별 활용신청은 따로). 독립 버전은 `seogwipo-tour/` 폴더 (`seogwipo-tour-site` skill 참고)
+- `src/Scenery.jsx` + `src/scenery.js` **3D 제주 경관**(데이터·API·차트 없음, three 만 사용). 섬 위에 한라산·오름·풍력발전기(회전)·등대(회전 불빛)·돌하르방·올레길(리본)·항·포구(둥실 배)·감귤밭·폭포 3곳·주상절리대·산방산·감귤박물관. 풍경을 누르면 3D 이름표, 아래 칩을 누르면 카메라가 날아가고(`focus(id)`) 설명 카드 표시, "전체 보기"(`home()`), 가만두면 천천히 자동 회전. 장소 추가는 `PLACES` 메타 + `reg(id, group)` 한 쌍. (관람객 추이 차트 버전은 뺐고 독립 프로젝트 `seogwipo-tour/` 로만 남아 있음 — `seogwipo-tour-site` skill 참고)
 - `vite.config.js` 로컬 `npm run dev` 에서 `/api/pixabay` 를 같은 핸들러로 처리하는 플러그인
 - `supabase/schema.sql` `favorites` 테이블 + RLS (본인 행만 select/insert/delete, `user_id default auth.uid()`)
 - `supabase/cart.sql` `products`(누구나 조회) + `cart_items`(본인만 CRUD, `unique(user_id, product_id)`) + RLS + 샘플 상품 시드. 여러 번 실행해도 안전(`drop policy if exists`, 비어 있을 때만 insert)

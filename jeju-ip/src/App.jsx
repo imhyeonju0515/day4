@@ -8,13 +8,13 @@ import CartDrawer from './CartDrawer.jsx'
 import { useCart } from './useCart.js'
 
 const Hero3D = lazy(() => import('./Hero3D.jsx'))
-const Visitors = lazy(() => import('./Visitors.jsx'))
+const Scenery = lazy(() => import('./Scenery.jsx'))
 
 // 메뉴 (주소의 #/이름 으로 구분해요. 새로고침·뒤로가기도 잘 돼요)
 const MENUS = [
   { id: '', icon: '🏠', name: '홈' },
   { id: 'gallery', icon: '📷', name: '사진 갤러리', desc: '돌하르방·한라산·해녀… 제주 사진을 둘러보고 ❤️ 담아 가세요' },
-  { id: 'visitors', icon: '📊', name: '관광 추이', desc: '서귀포 관광지 6곳, 언제 가면 한적한지 3D로 알아봐요' },
+  { id: 'scenery', icon: '🗺️', name: '3D 경관', desc: '한라산·오름·폭포·풍력발전기…를 3D로 돌려 보고 눌러 보세요' },
   { id: 'shop', icon: '🛍️', name: '제주 장터', desc: '감귤·한라봉·돌하르방 키링을 장바구니에 담아 보세요' },
 ]
 const getRoute = () => {
@@ -52,7 +52,7 @@ export default function App() {
     return () => removeEventListener('hashchange', onHash)
   }, [])
 
-  useEffect(() => { document.title = route ? `${MENUS.find(m => m.id === route).name} · 제주 IP 갤러리` : '제주 IP 갤러리' }, [route])
+  useEffect(() => { document.title = route ? `${MENUS.find(m => m.id === route)?.name} · 제주 IP 갤러리` : '제주 IP 갤러리' }, [route])
 
   function search(e) {
     e.preventDefault()
@@ -130,7 +130,7 @@ export default function App() {
             <Gallery user={user} searchTerm={searchTerm} onNeedLogin={needLogin} />
           </>
         )}
-        {route === 'visitors' && <Suspense fallback={<p className="status">불러오는 중…</p>}><Visitors /></Suspense>}
+        {route === 'scenery' && <Suspense fallback={<p className="status">불러오는 중…</p>}><Scenery /></Suspense>}
         {route === 'shop' && (supabaseReady
           ? <Shop user={user} cart={cart} onNeedLogin={needLogin} />
           : <p className="status">로그인 설정이 끝나면 장터가 열려요.</p>)}
@@ -138,7 +138,7 @@ export default function App() {
 
       <footer>
         <div className="foot-wave" aria-hidden="true" />
-        <p>🍊 제주의 바람과 귤향을 담아 · 사진 출처 <a href="https://pixabay.com" target="_blank" rel="noreferrer">Pixabay</a> · 관광 데이터 제주특별자치도 서귀포시</p>
+        <p>🍊 제주의 바람과 귤향을 담아 · 사진 출처 <a href="https://pixabay.com" target="_blank" rel="noreferrer">Pixabay</a></p>
       </footer>
       {showAuth && !user && <Auth onClose={() => setShowAuth(false)} />}
       {showCart && user && <CartDrawer cart={cart} onClose={() => setShowCart(false)} />}

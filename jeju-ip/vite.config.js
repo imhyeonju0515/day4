@@ -2,7 +2,7 @@ import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 
 // 로컬 개발(npm run dev)에서도 배포 환경과 똑같이 /api/* 를 쓸 수 있게 해 주는 작은 플러그인
-const API_ROUTES = ['pixabay', 'weather', 'visitors']
+const API_ROUTES = ['pixabay', 'weather']
 const API_KEYS = ['PIXABAY_API_KEY', 'DATA_GO_KR_KEY']
 
 function devApi(env) {
