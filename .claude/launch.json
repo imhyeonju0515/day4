@@ -1,7 +1,46 @@
 {
   "version": "0.0.1",
   "configurations": [
-    { "name": "day4-static", "runtimeExecutable": "npx", "runtimeArgs": ["--yes", "http-server", "-p", "8123", "-c-1", "."], "port": 8123 },
-    { "name": "jeju-ip", "runtimeExecutable": "npm", "runtimeArgs": ["--prefix", "jeju-ip", "run", "dev", "--", "--port", "5177"], "port": 5177 }
+    {
+      "name": "day4-static",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "--yes",
+        "http-server",
+        "-p",
+        "8123",
+        "-c-1",
+        "."
+      ],
+      "port": 8123
+    },
+    {
+      "name": "jeju-ip",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "jeju-ip",
+        "run",
+        "dev",
+        "--",
+        "--port",
+        "5177"
+      ],
+      "port": 5177
+    },
+    {
+      "name": "seogwipo-tour",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "seogwipo-tour",
+        "run",
+        "dev",
+        "--",
+        "--port",
+        "5178"
+      ],
+      "port": 5178
+    }
   ]
 }

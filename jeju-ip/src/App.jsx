@@ -8,6 +8,7 @@ import CartDrawer from './CartDrawer.jsx'
 import { useCart } from './useCart.js'
 
 const Hero3D = lazy(() => import('./Hero3D.jsx'))
+const Visitors = lazy(() => import('./Visitors.jsx'))
 
 export default function App() {
   const [user, setUser] = useState(null)
@@ -70,6 +71,7 @@ export default function App() {
           <p className="status err">Supabase 환경변수(VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY)가 아직 없어서 로그인 기능이 꺼져 있어요.</p>
         )}
         <Weather />
+        <Suspense fallback={null}><Visitors /></Suspense>
         {supabaseReady && <Shop user={user} cart={cart} onNeedLogin={needLogin} />}
         <Gallery user={user} searchTerm={searchTerm} onNeedLogin={needLogin} />
       </main>

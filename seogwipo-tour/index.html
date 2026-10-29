@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>서귀포 관광지 관람객 추이</title>
+    <meta name="description" content="서귀포시 직영관광지(천지연폭포, 정방폭포, 산방산 등)의 월별 관람객 수를 3D 제주 디오라마와 차트로 보고, 한적한 때를 찾아 보세요." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <header class="top">
+      <div class="brand"><span>🍊</span> 서귀포 관광지 관람객 추이</div>
+      <a class="src-link" href="#source">데이터 출처</a>
+    </header>
+
+    <main>
+      <section class="hero">
+        <h1>언제 가면 덜 붐빌까?</h1>
+        <p>서귀포시 직영관광지 6곳의 월별 관람객 수를 3D 제주 위에 기둥으로 세워 봤어요.<br />기둥이 높고 붉을수록 사람이 많은 때예요.</p>
+      </section>
+
+      <p id="notice" class="notice" hidden></p>
+
+      <section class="stage" aria-label="3D 제주 디오라마">
+        <div id="three"></div>
+        <div class="hud">
+          <div id="when">–</div>
+          <div id="peak"></div>
+        </div>
+        <div class="legend" aria-hidden="true"><span>한적</span><i></i><span>붐빔</span></div>
+        <div class="player">
+          <button id="play" aria-label="재생">▶</button>
+          <input id="slider" type="range" min="0" max="0" value="0" aria-label="기간 선택" />
+        </div>
+        <p class="hint">드래그해서 돌리고, 기둥을 누르면 그 관광지만 차트로 봐요</p>
+      </section>
+
+      <section class="panel">
+        <div id="chips" class="chips" role="group" aria-label="관광지 선택"></div>
+        <div class="charts">
+          <article class="card">
+            <h2>📈 월별 관람객 추이</h2>
+            <div class="chart-box"><canvas id="lineChart"></canvas></div>
+          </article>
+          <article class="card">
+            <h2>🗓️ 언제 가면 한적할까?</h2>
+            <div class="chart-box short"><canvas id="seasonChart"></canvas></div>
+            <p id="tip" class="tip"></p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer id="source">
+      <p>데이터 출처: 제주특별자치도 서귀포시 「직영관광지 관람객수 추이」 · 공공데이터포털(data.go.kr)</p>
+      <p id="updated"></p>
+      <p class="small">비영리 학습·개인 프로젝트입니다. 데이터가 비어 있는 달은 미집계 구간이에요.</p>
+    </footer>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
